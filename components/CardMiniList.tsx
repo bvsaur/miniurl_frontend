@@ -8,7 +8,7 @@ const CardMiniList = () => {
   return (
     <div className="my-5 self-stretch rounded-xl bg-white bg-opacity-30 py-5 px-4 md:my-0 md:flex-1">
       <p className="text-xl font-bold md:text-2xl">Your minis</p>
-      <div className="max-h-96 min-h-fit overflow-hidden overflow-y-scroll">
+      <div className="hide-scroll max-h-96 min-h-fit overflow-hidden overflow-y-scroll">
         {minis.length !== 0 ? (
           <AnimatePresence>
             {minis.map((mini) => (

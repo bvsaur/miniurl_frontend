@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react'
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 import toast from 'react-hot-toast'
 import { minisContext } from '../context/MinisContext'
 import { useField } from '../hooks/useField'
@@ -10,9 +10,11 @@ const CardMiniForm = () => {
   const { value, onChange, reset, isValid } = useField('', 'url')
   const { data } = useSession()
   const { addMini } = minisContext()
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     const axiosInstance = createAxiosInstance(data!.accessToken as string)
     try {
       const response = await axiosInstance.post('/minis', { url: value })
@@ -22,6 +24,8 @@ const CardMiniForm = () => {
     } catch (error: any) {
       toast.error(error.response.data.message)
       reset()
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -47,6 +51,7 @@ const CardMiniForm = () => {
           label="mini"
           disabledLabel="Type a valid URL"
           isValid={isValid}
+          loading={loading}
         />
       </form>
     </div>
