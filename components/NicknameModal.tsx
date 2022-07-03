@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react'
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 import toast from 'react-hot-toast'
 import { modalContext } from '../context/ModalContext'
 import { nicknameContext } from '../context/NicknameContext'
@@ -17,9 +17,11 @@ const NicknameModal = ({ nickname }: Props) => {
   const { setNickname } = nicknameContext()
   const { value, onChange, isValid } = useField(nickname, 'empty')
   const { data } = useSession()
+  const [loading, setLoading] = useState(false)
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     try {
       const axiosInstance = createAxiosInstance(data!.accessToken as string)
       await axiosInstance.put('/users', { nickname: value })
@@ -27,9 +29,10 @@ const NicknameModal = ({ nickname }: Props) => {
       setNickname(value)
       toggleModal('nickname')
     } catch (error: any) {
-      console.log(error)
       toast.error(error.response.data.message)
       toggleModal('delete')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -52,6 +55,7 @@ const NicknameModal = ({ nickname }: Props) => {
               label="Update"
               disabledLabel="Update"
               isValid={isValid}
+              loading={loading}
             ></Button>
           </div>
         </form>

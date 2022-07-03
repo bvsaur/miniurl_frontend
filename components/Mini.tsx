@@ -40,11 +40,13 @@ const Mini = ({ mini }: Props) => {
                 {url}
               </a>
             </Link>
+          </div>
+          <div className="flex space-x-5">
+            <p className="text-sm">Created {format(mini.CreatedAt)}</p>
             <button onClick={handleCopy} className="outline-none">
               <MdOutlineContentCopy size={15} />
             </button>
           </div>
-          <p className="text-sm">Created {format(mini.CreatedAt)}</p>
         </div>
       </div>
       <button

@@ -1,4 +1,5 @@
 import { useSession } from 'next-auth/react'
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { minisContext } from '../context/MinisContext'
 import { modalContext } from '../context/ModalContext'
@@ -9,10 +10,12 @@ import BaseModal from './BaseModal'
 const DeleteModal = () => {
   const { deleteModal, selectedMini, toggleModal } = modalContext()
   const { deleteMini } = minisContext()
+  const [loading, setLoading] = useState(false)
 
   const { data } = useSession()
 
   const onClick = async () => {
+    setLoading(true)
     try {
       const axiosInstance = createAxiosInstance(data!.accessToken as string)
       await axiosInstance.delete(`/minis/${selectedMini?.ID}`)
@@ -22,6 +25,8 @@ const DeleteModal = () => {
     } catch (error: any) {
       toast.error(error.response.data.message)
       toggleModal('delete')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -38,6 +43,7 @@ const DeleteModal = () => {
         <button
           className="mt-5 w-full rounded-md bg-red-500 py-2 font-kanit font-bold outline-none"
           onClick={onClick}
+          disabled={loading}
         >
           Confirm
         </button>
