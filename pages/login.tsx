@@ -7,7 +7,7 @@ import {
   LiteralUnion,
 } from 'next-auth/react'
 import Head from 'next/head'
-import AuthButton from '../components/AuthButton'
+import { AuthButton } from '../components'
 import { AiFillGithub, AiFillGitlab } from 'react-icons/ai'
 
 interface Props {

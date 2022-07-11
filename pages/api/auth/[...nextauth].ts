@@ -29,7 +29,6 @@ export default NextAuth({
           }
         )
         if (status === 201) {
-          console.log(data.token)
           account.access_token = data.token
           return true
         }
@@ -50,5 +49,11 @@ export default NextAuth({
   },
   pages: {
     signIn: '/login',
+  },
+  jwt: {
+    maxAge: 60 * 60 * 24 * 6,
+  },
+  session: {
+    maxAge: 60 * 60 * 24 * 6,
   },
 })

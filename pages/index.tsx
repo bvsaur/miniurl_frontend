@@ -1,13 +1,16 @@
-import { getSession, GetSessionParams } from 'next-auth/react'
+import { getSession, GetSessionParams, signOut } from 'next-auth/react'
 import Head from 'next/head'
 import { useEffect } from 'react'
-import CardMiniForm from '../components/CardMiniForm'
-import CardMiniList from '../components/CardMiniList'
-import CardUserInfo from '../components/CardUserInfo'
-import DeleteModal from '../components/DeleteModal'
-import Navbar from '../components/Navbar'
-import NicknameModal from '../components/NicknameModal'
-import QrModal from '../components/QrModal'
+import {
+  CardMiniForm,
+  CardMiniList,
+  CardUserInfo,
+  DeleteModal,
+  Navbar,
+  NicknameModal,
+  QrModal,
+} from '../components'
+
 import { minisContext } from '../context/MinisContext'
 import { modalContext } from '../context/ModalContext'
 import { nicknameContext } from '../context/NicknameContext'
@@ -17,9 +20,15 @@ import { createAxiosInstance } from '../libs'
 interface Props {
   userNickname: string
   userMinis: IMini[]
+  error?: boolean
 }
 
-const App = ({ userNickname, userMinis }: Props) => {
+const App = ({ userNickname, userMinis, error }: Props) => {
+  if (error) {
+    signOut()
+    return
+  }
+
   const { loadMinis } = minisContext()
   const { deleteModal, nicknameModal, qrModal } = modalContext()
   const { nickname, setNickname } = nicknameContext()
@@ -63,17 +72,27 @@ export async function getServerSideProps(context: GetSessionParams) {
     }
   }
 
-  const axiosInstance = createAxiosInstance(session.accessToken as string)
-  const [userData, userMinis] = await Promise.all([
-    axiosInstance.get('/users/me'),
-    axiosInstance.get('minis'),
-  ])
+  try {
+    const axiosInstance = createAxiosInstance(session.accessToken as string)
+    const [userData, userMinis] = await Promise.all([
+      axiosInstance.get('/users/me'),
+      axiosInstance.get('minis'),
+    ])
 
-  return {
-    props: {
-      userNickname: userData.data.nickname,
-      userMinis: userMinis.data.minis || [],
-    },
+    return {
+      props: {
+        userNickname: userData.data.nickname,
+        userMinis: userMinis.data.minis || [],
+      },
+    }
+  } catch (error) {
+    return {
+      props: {
+        userNickname: '',
+        userMinis: [],
+        error: true,
+      },
+    }
   }
 }
 
