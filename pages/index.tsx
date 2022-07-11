@@ -26,7 +26,6 @@ interface Props {
 const App = ({ userNickname, userMinis, error }: Props) => {
   if (error) {
     signOut()
-    return
   }
 
   const { loadMinis } = minisContext()
