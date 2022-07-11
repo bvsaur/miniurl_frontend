@@ -70,7 +70,7 @@ export async function getServerSideProps(context: GetSessionParams) {
     const axiosInstance = createAxiosInstance(session.accessToken as string)
     const [userData, userMinis] = await Promise.all([
       axiosInstance.get('/users/me'),
-      axiosInstance.get('minis'),
+      axiosInstance.get('/minis'),
     ])
     return {
       props: {
