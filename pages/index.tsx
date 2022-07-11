@@ -1,4 +1,4 @@
-import { getSession, GetSessionParams } from 'next-auth/react'
+import { getSession, GetSessionParams, signOut } from 'next-auth/react'
 import Head from 'next/head'
 import { useEffect } from 'react'
 import {
@@ -71,7 +71,6 @@ export async function getServerSideProps(context: GetSessionParams) {
       axiosInstance.get('/users/me'),
       axiosInstance.get('minis'),
     ])
-
     return {
       props: {
         userNickname: userData.data.nickname,
