@@ -8,7 +8,7 @@ const Document = () => {
           href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;400;700&family=Mukta+Vaani:wght@300;700&display=swap"
           rel="stylesheet"
         />
-        <link rel="shortcut icon" href="/static/favicon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <meta property="og:title" content="MiniURL" />
         <meta
           property="og:image"
