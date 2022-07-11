@@ -67,6 +67,16 @@ const Login = ({ providers }: Props) => {
 }
 
 export async function getServerSideProps(context: GetSessionParams) {
+  const session = await getSession(context)
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
   const providers = await getProviders()
   return {
     props: { providers },
